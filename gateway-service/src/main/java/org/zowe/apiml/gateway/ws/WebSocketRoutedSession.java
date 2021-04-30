@@ -87,7 +87,7 @@ public class WebSocketRoutedSession {
             Thread.currentThread().interrupt();
             throw webSocketProxyException(targetUrl, e, webSocketServerSession, false);
         } catch (Exception e) {
-            throw webSocketProxyException(targetUrl, e, webSocketServerSession, false);
+            throw webSocketProxyException(targetUrl, e, webSocketServerSession, true);
         }
     }
 

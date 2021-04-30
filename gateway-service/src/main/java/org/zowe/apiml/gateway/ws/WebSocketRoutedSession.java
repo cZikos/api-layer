@@ -84,7 +84,7 @@ public class WebSocketRoutedSession {
         } catch (IllegalStateException e) {
             throw webSocketProxyException(targetUrl, e, webSocketServerSession, true);
         } catch (Exception e) {
-            throw webSocketProxyException(targetUrl, e, webSocketServerSession, false);
+            throw webSocketProxyException(targetUrl, e, webSocketServerSession, true);
         }
     }
 

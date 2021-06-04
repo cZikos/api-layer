@@ -43,19 +43,25 @@ class AuthenticationControllerTest {
 
     @Test
     void whenCallAuthenticateEndpointWithDelete_thenReturnAparServiceProcessResult() throws Exception {
-        doReturn(DEFAULT_RESPONSE).when(aparService).process(any(), any(), any(), any());
+        doReturn(DEFAULT_RESPONSE).when(aparService).process(any(), any(), any(), any(), any());
         mockMvc.perform(delete("/zosmf/services/authenticate")).andExpect(status().is(SC_OK));
     }
 
     @Test
     void whenCallAuthenticateEndpointWithPost_thenReturnAparServiceProcessResult() throws Exception {
-        doReturn(DEFAULT_RESPONSE).when(aparService).process(any(), any(), any(), any());
+        doReturn(DEFAULT_RESPONSE).when(aparService).process(any(), any(), any(), any(), any());
         mockMvc.perform(post("/zosmf/services/authenticate")).andExpect(status().is(SC_OK));
     }
 
     @Test
     void whenCallZosmfNotificationEndpointWithGet_thenReturnAparServiceProcessResult() throws Exception {
-        doReturn(DEFAULT_RESPONSE).when(aparService).process(any(), any(), any(), any());
+        doReturn(DEFAULT_RESPONSE).when(aparService).process(any(), any(), any(), any(), any());
         mockMvc.perform(get("/zosmf/notifications/inbox")).andExpect(status().is(SC_OK));
+    }
+
+    @Test
+    void whenCallAuthenticateEndpointWithPut_thenReturnAparServiceProcessResult() throws Exception {
+        doReturn(DEFAULT_RESPONSE).when(aparService).process(any(), any(), any(), any(), any());
+        mockMvc.perform(post("/zosmf/services/authenticate")).andExpect(status().is(SC_OK));
     }
 }

@@ -28,6 +28,6 @@ public class JwtController {
     @GetMapping(value = "/jwt/ibm/api/zOSMFBuilder/**", produces = "application/json; charset=utf-8")
     public ResponseEntity<?> jwk(HttpServletResponse response,
                                  @RequestHeader Map<String, String> headers) {
-        return jwtHandler.process("jwtKeys", "get", response, headers);
+        return jwtHandler.process("jwtKeys", "get", response, headers, null);
     }
 }

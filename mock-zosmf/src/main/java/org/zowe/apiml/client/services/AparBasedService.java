@@ -36,13 +36,13 @@ public class AparBasedService {
         this.versions = versions;
     }
 
-    public ResponseEntity<?> process(String calledService, String calledMethods, HttpServletResponse response, Map<String, String> headers) {
+    public ResponseEntity<?> process(String calledService, String calledMethods, HttpServletResponse response, Map<String, String> headers, Object body) {
         try {
             List<Apar> applied = versions.fullSetOfApplied(baseVersion, appliedApars);
 
             Optional<ResponseEntity<?>> result = Optional.empty();
             for (Apar apar : applied) {
-                result = apar.apply(calledService, calledMethods, result, response, headers);
+                result = apar.apply(calledService, calledMethods, result, response, headers, body);
             }
 
             if (result.isPresent()) {

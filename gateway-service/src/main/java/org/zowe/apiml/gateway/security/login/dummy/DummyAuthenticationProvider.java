@@ -54,13 +54,7 @@ public class DummyAuthenticationProvider extends DaoAuthenticationProvider {
         UsernamePasswordAuthenticationToken usernamePasswordAuthentication;
 
         try {
-            String password;
-            if (authentication.getCredentials() instanceof LoginRequest) {
-                password = ((LoginRequest) authentication.getCredentials()).getPassword();
-            } else {
-                password = (String) authentication.getCredentials();
-            }
-
+            String password = LoginRequest.getPassword(authentication);
             authentication = new UsernamePasswordAuthenticationToken(authentication.getPrincipal(), password);
             usernamePasswordAuthentication
                 = (UsernamePasswordAuthenticationToken) super.authenticate(authentication);

@@ -39,6 +39,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.zowe.apiml.security.common.config.AuthConfigurationProperties;
 import org.zowe.apiml.security.common.error.ServiceNotAccessibleException;
+import org.zowe.apiml.security.common.login.LoginRequest;
 import org.zowe.apiml.security.common.token.TokenNotValidException;
 
 import javax.annotation.PostConstruct;
@@ -138,11 +139,15 @@ public class ZosmfService extends AbstractZosmfService {
     public AuthenticationResponse authenticate(Authentication authentication) {
         AuthenticationResponse authenticationResponse;
         if (loginEndpointExists()) {
-            authenticationResponse = issueAuthenticationRequest(
-                authentication,
-                getURI(getZosmfServiceId()) + ZOSMF_AUTHENTICATE_END_POINT,
-                HttpMethod.POST);
-
+            String authenticationUrl = getURI(getZosmfServiceId()) + ZOSMF_AUTHENTICATE_END_POINT;
+            if (StringUtils.isNotEmpty(LoginRequest.getNewPassword(authentication))) {
+                authenticationResponse = updatePassword((LoginRequest) authentication.getCredentials(), authenticationUrl);
+            } else {
+                authenticationResponse = issueAuthenticationRequest(
+                    authentication,
+                    authenticationUrl,
+                    HttpMethod.POST);
+            }
             if (meAsProxy.isInvalidated(authenticationResponse.getTokens().get(JWT))) {
                 invalidate(LTPA, authenticationResponse.getTokens().get(LTPA));
                 throw new TokenNotValidException("Invalid token returned from zosmf");
@@ -235,18 +240,28 @@ public class ZosmfService extends AbstractZosmfService {
      */
     protected AuthenticationResponse issueAuthenticationRequest(Authentication authentication, String url, HttpMethod httpMethod) {
         final HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, getAuthenticationValue(authentication));
+        headers.add(HttpHeaders.AUTHORIZATION, getBasicAuthenticationValue(authentication));
         headers.add(ZOSMF_CSRF_HEADER, "");
+        return getResponseFromUrl(url, httpMethod, null, headers);
+    }
 
+    private AuthenticationResponse getResponseFromUrl(String url, HttpMethod httpMethod, Object body, HttpHeaders headers) {
         try {
             final ResponseEntity<String> response = restTemplateWithoutKeystore.exchange(
                 url,
                 httpMethod,
-                new HttpEntity<>(null, headers), String.class);
+                new HttpEntity<>(body, headers), String.class);
             return getAuthenticationResponse(response);
         } catch (RuntimeException re) {
             throw handleExceptionOnCall(url, re);
         }
+    }
+
+    protected AuthenticationResponse updatePassword(LoginRequest loginRequest, String url) {
+        final HttpHeaders headers = new HttpHeaders();
+        headers.add(ZOSMF_CSRF_HEADER, "");
+        ZosmfAuthentication zosmfAuthentication = new ZosmfAuthentication(loginRequest.getUsername(), loginRequest.getPassword(), loginRequest.getNewPassword());
+        return getResponseFromUrl(url, HttpMethod.PUT, zosmfAuthentication, headers);
     }
 
     /**

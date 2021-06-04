@@ -43,7 +43,7 @@ class InfoControllerTest {
 
     @Test
     void whenCallInfoEndpointWithGet_thenReturnAparServiceProcessResult() throws Exception {
-        doReturn(DEFAULT_RESPONSE).when(aparService).process(any(), any(), any(), any());
+        doReturn(DEFAULT_RESPONSE).when(aparService).process(any(), any(), any(), any(), any());
         mockMvc.perform(get("/zosmf/info")).andExpect(status().is(SC_OK));
     }
 }

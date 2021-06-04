@@ -18,6 +18,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.zowe.apiml.client.api.ZosmfAuthentication;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -109,6 +110,26 @@ class PH12143Test {
 
             headers.put("authorization", getBasicAuthorizationHeader(USERNAME, PASSWORD));
             Optional<ResponseEntity<?>> result = underTest.apply(SERVICE, method, Optional.empty(), mockResponse, headers);
+            assertThat(result, is(expected));
+
+            ArgumentCaptor<Cookie> called = ArgumentCaptor.forClass(Cookie.class);
+            verify(mockResponse, times(2)).addCookie(called.capture());
+            List<Cookie> cookies = called.getAllValues();
+
+            Cookie jwt = cookies.get(0);
+            assertThat(jwt.getName(), is("jwtToken"));
+
+            Cookie ltpa = cookies.get(1);
+            assertThat(ltpa.getName(), is("LtpaToken2"));
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = {"update"})
+        void givenValidUserPasswordAndNewPassowrd_thenReturnJwtAndLtpa(String method) {
+            Optional<ResponseEntity<?>> expected = Optional.of(new ResponseEntity<>("{}", HttpStatus.OK));
+
+            ZosmfAuthentication authentication = new ZosmfAuthentication(USERNAME,PASSWORD,"newPassword");
+            Optional<ResponseEntity<?>> result = underTest.apply(SERVICE, method, Optional.empty(), mockResponse, null, authentication);
             assertThat(result, is(expected));
 
             ArgumentCaptor<Cookie> called = ArgumentCaptor.forClass(Cookie.class);

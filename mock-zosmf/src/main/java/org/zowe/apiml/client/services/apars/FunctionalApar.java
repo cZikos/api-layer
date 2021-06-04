@@ -12,6 +12,8 @@ package org.zowe.apiml.client.services.apars;
 import io.jsonwebtoken.Jwts;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
+import org.zowe.apiml.client.api.ZosmfAuthentication;
 import org.zowe.apiml.client.services.MockZosmfException;
 
 import javax.servlet.http.Cookie;
@@ -45,6 +47,11 @@ public class FunctionalApar implements Apar {
         Optional<ResponseEntity<?>> originalResult = (Optional<ResponseEntity<?>>) parameters[2];
         HttpServletResponse response = (HttpServletResponse) parameters[3];
         Map<String, String> headers = (Map<String, String>) parameters[4];
+
+        Object body = null;
+        if (parameters.length > 5) {
+            body = parameters[5];
+        }
         ResponseEntity<?> result = null;
 
         if (calledService.equals("authentication")) {
@@ -57,6 +64,9 @@ public class FunctionalApar implements Apar {
                     break;
                 case "delete":
                     result = handleAuthenticationDelete(headers);
+                    break;
+                case "update":
+                    result = handleAuthenticationUpdate(body, response);
                     break;
                 default:
                     result = handleAuthenticationDefault(headers);
@@ -77,6 +87,23 @@ public class FunctionalApar implements Apar {
         }
 
         return result == null ? originalResult : Optional.of(result);
+    }
+
+    protected ResponseEntity<?> handleAuthenticationUpdate(Object body, HttpServletResponse response) {
+        ZosmfAuthentication zosmfAuthentication = (ZosmfAuthentication) body;
+        if (isNotValidNewPasswordRequest(zosmfAuthentication)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        setLtpaToken(response);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    protected boolean isNotValidNewPasswordRequest(ZosmfAuthentication zosmfAuthentication) {
+        return zosmfAuthentication == null ||
+            StringUtils.isEmpty(zosmfAuthentication.getNewPwd()) ||
+            !usernames.contains(zosmfAuthentication.getUserID()) ||
+            !passwords.contains(zosmfAuthentication.getOldPwd()) ||
+            zosmfAuthentication.getNewPwd().equalsIgnoreCase(zosmfAuthentication.getOldPwd());
     }
 
     /**

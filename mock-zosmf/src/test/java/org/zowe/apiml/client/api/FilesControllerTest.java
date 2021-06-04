@@ -43,7 +43,7 @@ class FilesControllerTest {
 
     @Test
     void whenCallFilesEndpointWithGet_thenReturnAparServiceProcessResult() throws Exception {
-        doReturn(DEFAULT_RESPONSE).when(aparService).process(any(), any(), any(), any());
+        doReturn(DEFAULT_RESPONSE).when(aparService).process(any(), any(), any(), any(), any());
         mockMvc.perform(get("/zosmf/restfiles/ds")).andExpect(status().is(SC_OK));
     }
 }

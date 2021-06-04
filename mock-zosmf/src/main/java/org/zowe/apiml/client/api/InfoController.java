@@ -28,6 +28,6 @@ public class InfoController {
         HttpServletResponse response,
         @RequestHeader Map<String, String> headers
     ) {
-        return info.process("information", "get", response, headers);
+        return info.process("information", "get", response, headers, null);
     }
 }

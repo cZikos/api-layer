@@ -43,7 +43,7 @@ class JwtControllerTest {
 
     @Test
     void whenCallZosmfBuilderEndpointWithGet_thenReturnOk() throws Exception {
-        doReturn(DEFAULT_RESPONSE).when(aparService).process(any(), any(), any(), any());
+        doReturn(DEFAULT_RESPONSE).when(aparService).process(any(), any(), any(), any(), any());
         mockMvc.perform(get("/jwt/ibm/api/zOSMFBuilder")).andExpect(status().is(SC_OK));
     }
 }

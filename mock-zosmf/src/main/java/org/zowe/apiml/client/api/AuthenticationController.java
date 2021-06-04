@@ -28,7 +28,7 @@ public class AuthenticationController {
     @DeleteMapping(value = "/zosmf/services/authenticate", produces = "application/json; charset=utf-8")
     public ResponseEntity<?> logout(HttpServletResponse response,
                                     @RequestHeader Map<String, String> headers) {
-        return authentication.process(AUTHENTICATION_SERVICE, "delete", response, headers);
+        return authentication.process(AUTHENTICATION_SERVICE, "delete", response, headers, null);
     }
 
     @PostMapping(value = "/zosmf/services/authenticate", produces = "application/json; charset=utf-8")
@@ -36,11 +36,20 @@ public class AuthenticationController {
         HttpServletResponse response,
         @RequestHeader Map<String, String> headers
     ) {
-        return authentication.process(AUTHENTICATION_SERVICE, "create", response, headers);
+        return authentication.process(AUTHENTICATION_SERVICE, "create", response, headers, null);
+    }
+
+    @PutMapping(value = "/zosmf/services/authenticate", produces = "application/json; charset=utf-8")
+    public ResponseEntity<?> authenticate(
+        HttpServletResponse response,
+        @RequestBody ZosmfAuthentication zosmfAuthentication
+    ) {
+        return authentication.process(AUTHENTICATION_SERVICE, "update", response, null, zosmfAuthentication);
     }
 
     @GetMapping(value = "/zosmf/notifications/inbox", produces = "application/json; charset=utf-8")
     public ResponseEntity<?> verify(HttpServletResponse response, @RequestHeader Map<String, String> headers) {
-        return authentication.process(AUTHENTICATION_SERVICE, "verify", response, headers);
+        return authentication.process(AUTHENTICATION_SERVICE, "verify", response, headers, null);
     }
+
 }

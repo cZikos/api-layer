@@ -74,15 +74,9 @@ public abstract class AbstractZosmfService {
      * @param authentication credentials to generates header value
      * @return prepared header value (see header Authentication)
      */
-    protected String getAuthenticationValue(Authentication authentication) {
+    protected String getBasicAuthenticationValue(Authentication authentication) {
         final String user = authentication.getPrincipal().toString();
-        final String password;
-        if (authentication.getCredentials() instanceof LoginRequest) {
-            LoginRequest loginRequest = (LoginRequest) authentication.getCredentials();
-            password = loginRequest.getPassword();
-        } else {
-            password = (String) authentication.getCredentials();
-        }
+        final String password = LoginRequest.getPassword(authentication);
         final String credentials = user + ":" + password;
         return "Basic " + Base64.getEncoder().encodeToString(credentials.getBytes());
     }

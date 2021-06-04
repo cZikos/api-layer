@@ -28,7 +28,7 @@ public class FilesController {
         HttpServletResponse response,
         @RequestHeader Map<String, String> headers
     ) {
-        return files.process("files", "read", response, headers);
+        return files.process("files", "read", response, headers, null);
     }
 }
 

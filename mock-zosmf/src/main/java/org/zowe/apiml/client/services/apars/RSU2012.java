@@ -11,6 +11,8 @@ package org.zowe.apiml.client.services.apars;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
+import org.zowe.apiml.client.api.ZosmfAuthentication;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -23,6 +25,14 @@ public class RSU2012 extends FunctionalApar {
     public RSU2012(List<String> usernames, List<String> passwords, String keystorePath) {
         super(usernames, passwords);
         this.keystorePath = keystorePath;
+    }
+
+    protected ResponseEntity<?> handleAuthenticationUpdate(Object body, HttpServletResponse response) {
+        ZosmfAuthentication zosmfAuthentication = (ZosmfAuthentication) body;
+        if (StringUtils.isEmpty(zosmfAuthentication.getNewPwd()) || zosmfAuthentication.getNewPwd().equalsIgnoreCase(zosmfAuthentication.getOldPwd())) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        return validJwtResponse(response, zosmfAuthentication.getUserID(), keystorePath);
     }
 
     @Override

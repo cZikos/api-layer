@@ -54,7 +54,7 @@ class AparBasedServiceTest {
             ResponseEntity<?> expected = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             when(versions.fullSetOfApplied(any(), any())).thenThrow(new MockZosmfException("bad version"));
 
-            ResponseEntity<?> result = underTest.process(SERVICE, METHOD, response, HEADERS);
+            ResponseEntity<?> result = underTest.process(SERVICE, METHOD, response, HEADERS, null);
             assertThat(result, is(expected));
         }
 
@@ -65,7 +65,7 @@ class AparBasedServiceTest {
             when(versions.fullSetOfApplied(any(), any())).thenReturn(Collections.singletonList(apar));
             when(apar.apply(ArgumentMatchers.<Object>any())).thenReturn(expectedResult);
 
-            ResponseEntity<?> result = underTest.process(SERVICE, METHOD, response, HEADERS);
+            ResponseEntity<?> result = underTest.process(SERVICE, METHOD, response, HEADERS, null);
             assertThat(result, is(expected));
         }
 
@@ -82,7 +82,7 @@ class AparBasedServiceTest {
             when(apar.apply(ArgumentMatchers.<Object>any())).thenReturn(Optional.of(new ResponseEntity<>(HttpStatus.NO_CONTENT)));
             when(apar2.apply(ArgumentMatchers.<Object>any())).thenReturn(expectedResult);
 
-            ResponseEntity<?> result = underTest.process(SERVICE, METHOD, response, HEADERS);
+            ResponseEntity<?> result = underTest.process(SERVICE, METHOD, response, HEADERS, null);
             assertThat(result, is(expected));
         }
 
@@ -92,7 +92,7 @@ class AparBasedServiceTest {
 
             when(versions.fullSetOfApplied(any(), any())).thenReturn(Collections.emptyList());
 
-            ResponseEntity<?> result = underTest.process(SERVICE, METHOD, response, HEADERS);
+            ResponseEntity<?> result = underTest.process(SERVICE, METHOD, response, HEADERS, null);
             assertThat(result, is(expected));
         }
 
@@ -103,7 +103,7 @@ class AparBasedServiceTest {
             when(versions.fullSetOfApplied(any(), any())).thenReturn(Collections.singletonList(apar));
             when(apar.apply(ArgumentMatchers.<Object>any())).thenReturn(Optional.empty());
 
-            ResponseEntity<?> result = underTest.process(SERVICE, METHOD, response, HEADERS);
+            ResponseEntity<?> result = underTest.process(SERVICE, METHOD, response, HEADERS, null);
             assertThat(result, is(expected));
         }
     }

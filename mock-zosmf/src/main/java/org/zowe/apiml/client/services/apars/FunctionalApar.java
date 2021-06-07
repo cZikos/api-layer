@@ -20,6 +20,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.security.Key;
 import java.security.KeyStore;
 import java.util.*;
@@ -94,7 +95,12 @@ public class FunctionalApar implements Apar {
         if (isNotValidNewPasswordRequest(zosmfAuthentication)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        setLtpaToken(response);
+        try {
+            response.getWriter().write("{\"returnCode\":0,\"reasonCode\":0,\"message\":\"Success.\"}");
+            response.getWriter().flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

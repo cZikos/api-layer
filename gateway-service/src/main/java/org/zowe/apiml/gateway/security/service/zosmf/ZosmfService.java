@@ -11,6 +11,7 @@ package org.zowe.apiml.gateway.security.service.zosmf;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.discovery.DiscoveryClient;
 import com.nimbusds.jose.jwk.JWKSet;
@@ -31,6 +32,7 @@ import org.springframework.http.*;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -85,6 +87,7 @@ public class ZosmfService extends AbstractZosmfService {
 
         private String domain;
         private final Map<TokenType, String> tokens;
+        private String body;
     }
 
     /**
@@ -141,7 +144,8 @@ public class ZosmfService extends AbstractZosmfService {
         if (loginEndpointExists()) {
             String authenticationUrl = getURI(getZosmfServiceId()) + ZOSMF_AUTHENTICATE_END_POINT;
             if (StringUtils.isNotEmpty(LoginRequest.getNewPassword(authentication))) {
-                authenticationResponse = updatePassword((LoginRequest) authentication.getCredentials(), authenticationUrl);
+                authenticationResponse = authenticateWithPasswordUpdate(authentication, authenticationUrl);
+
             } else {
                 authenticationResponse = issueAuthenticationRequest(
                     authentication,
@@ -159,6 +163,23 @@ public class ZosmfService extends AbstractZosmfService {
                 zosmfInfoURIEndpoint,
                 HttpMethod.GET);
             authenticationResponse.setDomain(meAsProxy.getZosmfRealm(zosmfInfoURIEndpoint));
+        }
+        return authenticationResponse;
+    }
+
+    private AuthenticationResponse authenticateWithPasswordUpdate(Authentication authentication, String authenticationUrl) {
+        AuthenticationResponse authenticationResponse = updatePassword((LoginRequest) authentication.getCredentials(), authenticationUrl);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            ZosmfResponse response = mapper.readValue(authenticationResponse.getBody(), ZosmfResponse.class);
+            if (response.getReturnCode() == 0) {
+                authenticationResponse = issueAuthenticationRequest(
+                    new UsernamePasswordAuthenticationToken(authentication.getPrincipal(), LoginRequest.getNewPassword(authentication)),
+                    authenticationUrl,
+                    HttpMethod.POST);
+            }
+        } catch (JsonProcessingException e) {
+            throw new AuthenticationServiceException("Not able to parse zOSMF authentication response",e);
         }
         return authenticationResponse;
     }
@@ -431,7 +452,9 @@ public class ZosmfService extends AbstractZosmfService {
                 if (token != null) tokens.put(tokenType, token);
             }
         }
-        return new ZosmfService.AuthenticationResponse(tokens);
+        AuthenticationResponse response = new ZosmfService.AuthenticationResponse(tokens);
+        response.setBody(responseEntity.getBody());
+        return response;
     }
 
     public JWKSet getPublicKeys() {

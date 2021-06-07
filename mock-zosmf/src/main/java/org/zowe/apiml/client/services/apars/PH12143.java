@@ -26,14 +26,6 @@ public class PH12143 extends FunctionalApar {
         this.keystorePath = keystorePath;
     }
 
-    protected ResponseEntity<?> handleAuthenticationUpdate(Object body, HttpServletResponse response) {
-        ZosmfAuthentication zosmfAuthentication = (ZosmfAuthentication) body;
-        if (isNotValidNewPasswordRequest(zosmfAuthentication)) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-        return validJwtResponse(response, zosmfAuthentication.getUserID(), keystorePath);
-    }
-
     @Override
     protected ResponseEntity<?> handleAuthenticationCreate(Map<String, String> headers, HttpServletResponse response) {
         if (isUnauthorized(headers)) {

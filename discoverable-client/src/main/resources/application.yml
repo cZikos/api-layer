@@ -100,8 +100,8 @@ apiml:
                 corsEnabled: false
                 lb:
                     instanceIdHeader: enabled
-            cluster: DISCOVERABLECLIENT
                     type: headerRequest
+            cluster: DISCOVERABLECLIENT
 
 server:
     error:

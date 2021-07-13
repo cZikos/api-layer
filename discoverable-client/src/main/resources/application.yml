@@ -101,6 +101,7 @@ apiml:
                 lb:
                     instanceIdHeader: enabled
             cluster: DISCOVERABLECLIENT
+                    type: headerRequest
 
 server:
     error:

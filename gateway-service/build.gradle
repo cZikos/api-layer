@@ -54,41 +54,41 @@ configurations.all {
 }
 
 dependencies {
-    implementation(project(':apiml-security-common'))
-    implementation libraries.spring_cloud_starter_zuul
-    implementation libraries.spring_boot_starter_actuator
-    implementation libraries.spring_boot_starter_web
-    implementation libraries.spring_boot_starter_websocket
-    implementation libraries.spring_boot_starter_thymeleaf
-    implementation libraries.spring_boot_starter_cache
-    implementation libraries.spring_boot_starter_aop
-    implementation libraries.spring_security_web
-    implementation libraries.spring_security_config
-    implementation libraries.swagger3_core
-    implementation libraries.swagger3_parser
-    implementation libraries.jackson_core
-    implementation libraries.tomcat_coyote
-    implementation libraries.tomcat_embed_core
-    implementation libraries.spring_cloud_starter_eureka
-    implementation libraries.spring_cloud_starter_ribbon
-    implementation libraries.jetty_websocket_common
-    implementation libraries.jetty_websocket_client
-    implementation libraries.jetty_client
-    implementation libraries.jetty_http
-    implementation libraries.jetty_io
-    implementation libraries.jetty_util
-    implementation libraries.jetty_websocket_api
-    implementation libraries.jjwt
-    implementation libraries.nimbusJoseJwt
-    implementation libraries.eh_cache
-    implementation libraries.spring_retry
-    implementation libraries.awaitility
+    compileOnly(project(':apiml-security-common'))
+    compileOnly libraries.spring_cloud_starter_zuul
+    compileOnly libraries.spring_boot_starter_actuator
+    compileOnly libraries.spring_boot_starter_web
+    compileOnly libraries.spring_boot_starter_websocket
+    compileOnly libraries.spring_boot_starter_thymeleaf
+    compileOnly libraries.spring_boot_starter_cache
+    compileOnly libraries.spring_boot_starter_aop
+    compileOnly libraries.spring_security_web
+    compileOnly libraries.spring_security_config
+    compileOnly libraries.swagger3_core
+    compileOnly libraries.swagger3_parser
+    compileOnly libraries.jackson_core
+    compileOnly libraries.tomcat_coyote
+    compileOnly libraries.tomcat_embed_core
+    compileOnly libraries.spring_cloud_starter_eureka
+    compileOnly libraries.spring_cloud_starter_ribbon
+    compileOnly libraries.jetty_websocket_common
+    compileOnly libraries.jetty_websocket_client
+    compileOnly libraries.jetty_client
+    compileOnly libraries.jetty_http
+    compileOnly libraries.jetty_io
+    compileOnly libraries.jetty_util
+    compileOnly libraries.jetty_websocket_api
+    compileOnly libraries.jjwt
+    compileOnly libraries.nimbusJoseJwt
+    compileOnly libraries.eh_cache
+    compileOnly libraries.spring_retry
+    compileOnly libraries.awaitility
 
     compileOnly libraries.javax_inject
     compileOnly libraries.lombok
     annotationProcessor libraries.lombok
 
-    implementation libraries.springFox
+    compileOnly libraries.springFox
     testCompile libraries.spring_mock_mvc
     testCompile libraries.spring_boot_starter_test
     testRuntime libraries.http_client

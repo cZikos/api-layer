@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.zowe.apiml.client.model.Registered;
 import org.zowe.apiml.client.service.ApiMediationClientService;
 import org.zowe.apiml.exception.ServiceDefinitionException;
+import org.zowe.apiml.gateway.config.GatewayConfig;
 
 @RestController
 @RequestMapping("/api/v1/apiMediationClient")
@@ -26,6 +27,7 @@ import org.zowe.apiml.exception.ServiceDefinitionException;
 )
 public class ApiMediationClientTestController {
     private final ApiMediationClientService apiMediationClientService;
+    private GatewayConfig gatewayConfig;
 
     public ApiMediationClientTestController(ApiMediationClientService apiMediationClientService) {
         this.apiMediationClientService = apiMediationClientService;

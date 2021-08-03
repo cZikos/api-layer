@@ -19,6 +19,7 @@ apply plugin: 'com.gorylenko.gradle-git-properties'
 apply from: "$projectDir/gradle/lite.gradle"
 apply plugin: 'com.google.cloud.tools.jib'
 apply from: "../gradle/jib.gradle"
+apply plugin: "java-library"
 
 def debugPort = 5120
 def componentName = "gateway-service"
@@ -54,41 +55,41 @@ configurations.all {
 }
 
 dependencies {
-    compileOnly(project(':apiml-security-common'))
-    compileOnly libraries.spring_cloud_starter_zuul
-    compileOnly libraries.spring_boot_starter_actuator
-    compileOnly libraries.spring_boot_starter_web
-    compileOnly libraries.spring_boot_starter_websocket
-    compileOnly libraries.spring_boot_starter_thymeleaf
-    compileOnly libraries.spring_boot_starter_cache
-    compileOnly libraries.spring_boot_starter_aop
-    compileOnly libraries.spring_security_web
-    compileOnly libraries.spring_security_config
-    compileOnly libraries.swagger3_core
-    compileOnly libraries.swagger3_parser
-    compileOnly libraries.jackson_core
-    compileOnly libraries.tomcat_coyote
-    compileOnly libraries.tomcat_embed_core
-    compileOnly libraries.spring_cloud_starter_eureka
-    compileOnly libraries.spring_cloud_starter_ribbon
-    compileOnly libraries.jetty_websocket_common
-    compileOnly libraries.jetty_websocket_client
-    compileOnly libraries.jetty_client
-    compileOnly libraries.jetty_http
-    compileOnly libraries.jetty_io
-    compileOnly libraries.jetty_util
-    compileOnly libraries.jetty_websocket_api
-    compileOnly libraries.jjwt
-    compileOnly libraries.nimbusJoseJwt
-    compileOnly libraries.eh_cache
-    compileOnly libraries.spring_retry
-    compileOnly libraries.awaitility
+    api(project(':apiml-security-common'))
+    api libraries.spring_cloud_starter_zuul
+    api libraries.spring_boot_starter_actuator
+    api libraries.spring_boot_starter_web
+    api libraries.spring_boot_starter_websocket
+    api libraries.spring_boot_starter_thymeleaf
+    api libraries.spring_boot_starter_cache
+    api libraries.spring_boot_starter_aop
+    api libraries.spring_security_web
+    api libraries.spring_security_config
+    api libraries.swagger3_core
+    api libraries.swagger3_parser
+    api libraries.jackson_core
+    api libraries.tomcat_coyote
+    api libraries.tomcat_embed_core
+    api libraries.spring_cloud_starter_eureka
+    api libraries.spring_cloud_starter_ribbon
+    api libraries.jetty_websocket_common
+    api libraries.jetty_websocket_client
+    api libraries.jetty_client
+    api libraries.jetty_http
+    api libraries.jetty_io
+    api libraries.jetty_util
+    api libraries.jetty_websocket_api
+    api libraries.jjwt
+    api libraries.nimbusJoseJwt
+    api libraries.eh_cache
+    api libraries.spring_retry
+    api libraries.awaitility
 
     compileOnly libraries.javax_inject
     compileOnly libraries.lombok
     annotationProcessor libraries.lombok
 
-    compileOnly libraries.springFox
+    api libraries.springFox
     testCompile libraries.spring_mock_mvc
     testCompile libraries.spring_boot_starter_test
     testRuntime libraries.http_client

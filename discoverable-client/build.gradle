@@ -57,7 +57,7 @@ dependencies {
     implementation libraries.zowe_attls
     implementation libraries.spring_cloud_starter_hystrix
     implementation libraries.spring_cloud_hystrix_dashboard
-
+    compileOnly "org.zowe.apiml.sdk:gateway-service:1.40.2-SNAPSHOT"
     implementation libraries.bootstrap
     implementation libraries.jquery
 

@@ -93,6 +93,13 @@ messages:
       reason: "The service is not available. It might be removed by the Circuit Breaker or by requesting specific instance that is not available"
       action: "Try the request later or remove the request for specific instance."
 
+    - key: org.zowe.apiml.security.unauthorized
+      number: ZWEAG711
+      type: ERROR
+      text: "The principal '%s' is missing queried authorization."
+      reason: "The principal does not have the queried access to resource name within resource class."
+      action: "No action needed."
+
     # Legacy messages
 
     - key: org.zowe.apiml.security.generic
@@ -186,6 +193,13 @@ messages:
       text: "Authorization header is missing, or the request body is missing or invalid for URL '%s'"
       reason: "The authorization header is missing, or the request body is missing or invalid."
       action: "Provide valid authentication."
+
+    - key: org.zowe.apiml.security.login.invalidTokenType
+      number: ZWEAS123
+      type: ERROR
+      text: "Invalid token type in response from Authentication service."
+      reason: "Could not retrieve the proper authentication token from the Authentication service response."
+      action: "Review your APIML authentication provider configuration and ensure your Authentication service is working."
 
     # Query messages (130 - 140)
     - key: org.zowe.apiml.security.query.invalidToken
